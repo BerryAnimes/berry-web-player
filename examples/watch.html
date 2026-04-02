@@ -4,12 +4,37 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Berry Web Player Example</title>
+  <style>
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      background: #000;
+    }
+
+    #watchApp {
+      width: 100%;
+      height: 100%;
+      background: #000;
+    }
+
+    #watchApp[data-shell-state="booting"] {
+      visibility: hidden;
+    }
+
+    #watchApp[data-shell-state="ready"],
+    #watchApp[data-shell-state="error"] {
+      visibility: visible;
+    }
+  </style>
   <link rel="stylesheet" href="../dist/berry-player.css">
   <script src="../dist/cast-bootstrap.js"></script>
 </head>
 <body>
   <div
     id="watchApp"
+    data-shell-state="booting"
     data-asset-base="../dist"
     data-template-url="../dist/templates/watch-player-shell.html"
     data-storage-namespace="berry-web-player"

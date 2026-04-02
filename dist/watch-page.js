@@ -1,8 +1,18 @@
-import { bootstrapBerryWatchPage } from './berry-player.js';
-
 const DEFAULT_ASSET_BASE = '/berry-web-player';
 const DEFAULT_TEMPLATE_PATH = `${DEFAULT_ASSET_BASE}/templates/watch-player-shell.html`;
 const ICON_SPRITE_HOST_ID = 'berryPlayerIconSpriteHost';
+const SHELL_STATE_ATTR = 'data-shell-state';
+let berryPlayerBootstrapPromise = null;
+
+async function loadBerryPlayerBootstrap() {
+  if (!berryPlayerBootstrapPromise) {
+    const currentModuleUrl = new URL(import.meta.url);
+    const cacheSuffix = currentModuleUrl.search || '';
+    berryPlayerBootstrapPromise = import(`./berry-player.js${cacheSuffix}`)
+      .then((module) => module.bootstrapBerryWatchPage);
+  }
+  return berryPlayerBootstrapPromise;
+}
 
 function normalizeAssetBase(value) {
   const normalized = String(value || DEFAULT_ASSET_BASE).trim().replace(/\/+$/, '');
@@ -10,6 +20,7 @@ function normalizeAssetBase(value) {
 }
 
 function renderShellError(root, message) {
+  root.setAttribute(SHELL_STATE_ATTR, 'error');
   root.innerHTML = `<div class="watch-error">${message}</div>`;
 }
 
@@ -56,6 +67,7 @@ async function mountIconSprite(root, assetBase) {
 async function startWatchPage() {
   const root = document.getElementById('watchApp');
   if (!root) return;
+  root.setAttribute(SHELL_STATE_ATTR, 'booting');
 
   const assetBase = normalizeAssetBase(root.dataset.assetBase);
   const templateUrl = root.dataset.templateUrl || DEFAULT_TEMPLATE_PATH;
@@ -71,6 +83,7 @@ async function startWatchPage() {
       templateUrl
     });
     await mountIconSprite(root, assetBase);
+    const bootstrapBerryWatchPage = await loadBerryPlayerBootstrap();
     bootstrapBerryWatchPage({
       assetBase,
       storageNamespace,
@@ -78,6 +91,9 @@ async function startWatchPage() {
       streamProviderValue,
       streamContextHeader,
       downloadPrefix
+    });
+    requestAnimationFrame(() => {
+      root.setAttribute(SHELL_STATE_ATTR, 'ready');
     });
   } catch (error) {
     renderShellError(root, error?.message || 'Erro ao montar o player.');

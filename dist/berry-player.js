@@ -7486,6 +7486,9 @@ export function bootstrapBerryWatchPage(options = {}) {
 
       const resolveBloggerIframeUrl = (candidateUrl) => {
         if (!candidateUrl) return null;
+        if (resolveDirectBloggerStreamUrl(candidateUrl)) {
+          return null;
+        }
         try {
           const parsed = new URL(candidateUrl, window.location.origin);
           const host = String(parsed.hostname || '').toLowerCase();
@@ -7684,8 +7687,6 @@ export function bootstrapBerryWatchPage(options = {}) {
         setSubtitleRuntimeState(null, 'off', null);
         state.assFallbackOptionId = null;
         nextSubtitleSelectionEpoch();
-        state.streamUrl = streamUrl;
-        state.streamType = inferMimeType(streamUrl, typeHint || playerData?.type || '');
         state.streamProvider = String(playerData?.provider || '').toLowerCase();
         state.streamProviderHeader = String(playerData?.streamProviderHeader || config.streamProviderHeader).trim() || config.streamProviderHeader;
         state.streamProviderValue = String(playerData?.streamProviderValue || config.streamProviderValue).trim() || config.streamProviderValue;
@@ -7713,13 +7714,29 @@ export function bootstrapBerryWatchPage(options = {}) {
           state.streamProvider === 'blogger' && playerData?.externalEmbed
             ? String(playerData.externalEmbedUrl || playerData.embed_url || '').trim()
             : '';
+        const bloggerDirectStreamUrl =
+          state.streamProvider === 'blogger'
+            ? (
+                resolveDirectBloggerStreamUrl(streamUrl || '')
+                || resolveDirectBloggerStreamUrl(externalEmbedUrl)
+                || resolveDirectBloggerStreamUrl(playerData?.externalEmbedUrl || '')
+                || resolveDirectBloggerStreamUrl(playerData?.embed_url || '')
+                || null
+              )
+            : null;
+        if (bloggerDirectStreamUrl) {
+          streamUrl = bloggerDirectStreamUrl;
+          typeHint = inferDirectStreamTypeHint(bloggerDirectStreamUrl);
+        }
+        state.streamUrl = streamUrl;
+        state.streamType = inferMimeType(streamUrl, typeHint || playerData?.type || '');
         const bloggerIframeUrl =
           state.streamProvider === 'blogger'
             ? (
-                externalEmbedUrl
+                resolveBloggerIframeUrl(externalEmbedUrl)
                 || resolveBloggerIframeUrl(playerData?.externalEmbedUrl || '')
                 || resolveBloggerIframeUrl(playerData?.embed_url || '')
-                || resolveBloggerIframeUrl(streamUrl || '')
+                || (!bloggerDirectStreamUrl ? resolveBloggerIframeUrl(streamUrl || '') : null)
               )
             : null;
         if (bloggerIframeUrl) {
@@ -9452,14 +9469,31 @@ export function bootstrapBerryWatchPage(options = {}) {
           const explicitExternalEmbedUrl =
             String(playerData.externalEmbedUrl || '').trim()
             || (playerData.externalEmbed ? String(playerData.embed_url || '').trim() : '');
-          const bloggerEmbedFrameUrl =
+          const directBloggerStreamUrl =
             String(playerData.provider || '').toLowerCase() === 'blogger'
               ? (
-                  explicitExternalEmbedUrl
-                  || resolveBloggerIframeUrl(playerData.embed_url || '')
+                  resolveDirectBloggerStreamUrl(streamUrl || '')
+                  || resolveDirectBloggerStreamUrl(playerData.streamUrl || '')
+                  || resolveDirectBloggerStreamUrl(playerData.watchUrl || '')
+                  || resolveDirectBloggerStreamUrl(explicitExternalEmbedUrl)
+                  || resolveDirectBloggerStreamUrl(playerData.embed_url || '')
                   || null
                 )
               : null;
+          const bloggerEmbedFrameUrl =
+            String(playerData.provider || '').toLowerCase() === 'blogger'
+              ? (
+                  resolveBloggerIframeUrl(explicitExternalEmbedUrl)
+                  || resolveBloggerIframeUrl(playerData.embed_url || '')
+                  || (!directBloggerStreamUrl ? resolveBloggerIframeUrl(streamUrl || '') : null)
+                  || null
+                )
+              : null;
+
+          if (directBloggerStreamUrl) {
+            streamUrl = directBloggerStreamUrl;
+            typeHint = inferDirectStreamTypeHint(directBloggerStreamUrl);
+          }
 
           if (
             !streamUrl &&
