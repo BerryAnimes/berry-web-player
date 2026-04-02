@@ -1,0 +1,16 @@
+{
+  "name": "@berryanimes/berry-web-player",
+  "version": "0.1.0",
+  "private": false,
+  "description": "Biblioteca pública do player web extraído da BerryAnimes.",
+  "type": "module",
+  "license": "Apache-2.0",
+  "files": [
+    "dist",
+    "docs",
+    "examples"
+  ],
+  "scripts": {
+    "check:modules": "node ./scripts/verify-modules.mjs"
+  }
+}

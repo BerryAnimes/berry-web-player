@@ -1,0 +1,390 @@
+  <div class="watch-page" id="watchPage">
+    <div class="watch-error hidden" id="watchError">Erro ao carregar episódio.</div>
+
+    <div class="media-player" id="mediaPlayer" data-buffering="true">
+      <video id="mediaVideo" playsinline preload="auto"></video>
+      <iframe
+        id="mediaEmbedFrame"
+        class="media-embed-frame"
+        title="Player externo"
+        loading="eager"
+        referrerpolicy="no-referrer"
+        allow="autoplay; fullscreen; picture-in-picture; encrypted-media"
+        hidden
+      ></iframe>
+
+      <div class="media-buffering-indicator">
+        <svg class="media-buffering-spinner" width="112" height="112" viewBox="0 0 112 112" aria-hidden="true">
+          <circle class="media-buffering-track" cx="56" cy="56" r="38" fill="none" stroke="currentColor" stroke-width="7"></circle>
+          <path class="media-buffering-track-fill" d="M56 18a38 38 0 0 1 38 38" fill="none" stroke="currentColor" stroke-width="7" stroke-linecap="round"></path>
+        </svg>
+      </div>
+
+      <div class="media-player-header">
+        <div class="media-player-title">
+          <img class="media-player-title-image is-hidden" id="animeTitleImage" alt="Título do anime">
+          <span class="media-player-title-fallback" id="episodeTitle">BerryAnimes</span>
+          <span class="media-player-episode-label" id="episodeLabel">Episódio 1</span>
+        </div>
+      </div>
+
+      <div class="media-controls" id="mediaControls">
+        <div class="media-controls-row media-controls-row--progress">
+          <div class="media-slider" id="timeSlider" role="slider" aria-label="Linha do tempo" tabindex="0" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0">
+            <div class="media-slider-track">
+              <div class="media-slider-progress" id="timeSliderProgress"></div>
+              <div class="media-slider-track-fill" id="timeSliderFill"></div>
+            </div>
+            <div class="media-slider-thumb" id="timeSliderThumb"></div>
+            <div class="media-slider-preview" id="timeSliderPreview">
+              <img class="media-slider-thumbnail" id="timeSliderPreviewImage" alt="Thumbnail do tempo">
+              <div class="media-slider-value" id="timeSliderPreviewValue">00:00</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="media-controls-row media-controls-row--buttons">
+          <div class="media-left-controls">
+            <button class="media-button" id="playBtn" aria-label="Play/Pause" data-playing="false" type="button">
+              <svg class="icon-when-paused" viewBox="0 0 24 24" aria-hidden="true">
+                <use href="__BERRY_PLAYER_ASSET_BASE__/icons.svg#play"></use>
+              </svg>
+              <svg class="icon-when-playing" viewBox="0 0 24 24" aria-hidden="true">
+                <use href="__BERRY_PLAYER_ASSET_BASE__/icons.svg#pause"></use>
+              </svg>
+            </button>
+
+            <button class="media-button" id="nextBtn" aria-label="Próximo episódio" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <use href="__BERRY_PLAYER_ASSET_BASE__/icons.svg#next"></use>
+              </svg>
+            </button>
+
+            <div class="media-volume-group">
+              <button class="media-button" id="muteBtn" aria-label="Mutar áudio" data-muted="false" type="button">
+                <svg class="icon-when-unmuted" viewBox="0 0 24 24" aria-hidden="true">
+                  <use href="__BERRY_PLAYER_ASSET_BASE__/icons.svg#volume-on"></use>
+                </svg>
+                <svg class="icon-when-muted" viewBox="0 0 24 24" aria-hidden="true">
+                  <use href="__BERRY_PLAYER_ASSET_BASE__/icons.svg#volume-off"></use>
+                </svg>
+              </button>
+
+              <div class="media-volume-wrap">
+                <div class="media-slider media-volume-slider" id="volumeSlider" role="slider" aria-label="Volume" tabindex="0" aria-valuemin="0" aria-valuemax="100" aria-valuenow="100">
+                  <div class="media-slider-track">
+                    <div class="media-slider-track-fill" id="volumeSliderFill"></div>
+                  </div>
+                  <div class="media-slider-thumb" id="volumeSliderThumb"></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="media-time-group">
+              <span class="media-time" id="currentTimeText">00:00</span>
+              <span class="media-time-divider">/</span>
+              <span class="media-time" id="durationText">00:00</span>
+            </div>
+          </div>
+
+          <div class="media-center-controls" aria-hidden="true"></div>
+
+          <div class="media-right-controls">
+            <button class="media-button" id="captionsBtn" aria-label="Ativar/desativar legendas" data-caption="off" type="button">
+              <svg class="icon-when-caption-off" viewBox="0 0 24 24" aria-hidden="true">
+                <use href="__BERRY_PLAYER_ASSET_BASE__/icons.svg#captions-off"></use>
+              </svg>
+              <svg class="icon-when-caption-on" viewBox="0 0 24 24" aria-hidden="true">
+                <use href="__BERRY_PLAYER_ASSET_BASE__/icons.svg#captions-on"></use>
+              </svg>
+            </button>
+
+            <button class="media-button" id="settingsBtn" aria-label="Configurações do player" type="button">
+              <svg viewBox="0 0 24 24" class="berry-settings-icon lucide lucide-settings" aria-hidden="true">
+                <use href="__BERRY_PLAYER_ASSET_BASE__/icons.svg#settings"></use>
+              </svg>
+            </button>
+
+            <button class="media-button" id="screenshotBtn" aria-label="Capturar cena" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <use href="__BERRY_PLAYER_ASSET_BASE__/icons.svg#screenshot"></use>
+              </svg>
+            </button>
+
+            <button class="media-button" id="clipBtn" aria-label="Exportar clipe" type="button" hidden>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <use href="__BERRY_PLAYER_ASSET_BASE__/icons.svg#clip"></use>
+              </svg>
+            </button>
+
+            <button class="media-button" id="commentsBtn" aria-label="Comentários" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <use href="__BERRY_PLAYER_ASSET_BASE__/icons.svg#comments"></use>
+              </svg>
+              <span class="media-button-badge" id="commentsCountBadge" hidden>0</span>
+            </button>
+
+            <button class="media-button" id="episodesBtn" aria-label="Lista de episódios" type="button">
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <use href="__BERRY_PLAYER_ASSET_BASE__/icons.svg#episodes"></use>
+              </svg>
+            </button>
+
+            <button class="media-button" id="castBtn" aria-label="Google Cast" type="button" disabled>
+              <svg viewBox="0 0 24 24" aria-hidden="true">
+                <use href="__BERRY_PLAYER_ASSET_BASE__/icons.svg#cast"></use>
+              </svg>
+            </button>
+
+            <button class="media-button" id="pipBtn" aria-label="Picture in Picture" data-pip="off" type="button">
+              <svg class="icon-when-pip-off" viewBox="0 0 24 24" aria-hidden="true">
+                <use href="__BERRY_PLAYER_ASSET_BASE__/icons.svg#pip-off"></use>
+              </svg>
+              <svg class="icon-when-pip-on" viewBox="0 0 24 24" aria-hidden="true">
+                <use href="__BERRY_PLAYER_ASSET_BASE__/icons.svg#pip-on"></use>
+              </svg>
+            </button>
+
+            <button class="media-button" id="fullscreenBtn" aria-label="Tela cheia" data-fullscreen="off" type="button">
+              <svg class="icon-when-fs-off" viewBox="0 0 24 24" aria-hidden="true">
+                <use href="__BERRY_PLAYER_ASSET_BASE__/icons.svg#fullscreen-off"></use>
+              </svg>
+              <svg class="icon-when-fs-on" viewBox="0 0 24 24" aria-hidden="true">
+                <use href="__BERRY_PLAYER_ASSET_BASE__/icons.svg#fullscreen-on"></use>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="episodes-popover" id="episodesPopover" aria-hidden="true">
+      <div class="episodes-popover-head">
+        <span id="episodesPopoverSeason">Temporada 1</span>
+        <span id="episodesPopoverCount">0 episódios</span>
+      </div>
+      <div class="episodes-popover-list" id="episodesPopoverList"></div>
+    </div>
+
+    <div class="settings-popover" id="settingsPopover" aria-hidden="true">
+      <div class="settings-menu-main" id="settingsMenuMain">
+        <button class="settings-row settings-row--toggle" id="settingsMainAutoplayRow" type="button" aria-pressed="false" aria-label="Alternar autoplay">
+          <span class="settings-row-label">Autoplay</span>
+          <span class="settings-switch" id="settingsAutoplayToggle" data-state="off" aria-hidden="true">
+            <span class="settings-switch-knob"></span>
+          </span>
+        </button>
+        <button class="settings-row settings-row--link" id="settingsMainAudioBtn" type="button" aria-label="Abrir opções de áudio">
+          <span class="settings-row-label">Áudio</span>
+          <span class="settings-row-value" id="settingsMainAudioValue">N/D</span>
+          <span class="settings-row-arrow" aria-hidden="true">›</span>
+        </button>
+        <button class="settings-row settings-row--link" id="settingsMainQualityBtn" type="button" aria-label="Abrir opções de qualidade">
+          <span class="settings-row-label">Qualidade</span>
+          <span class="settings-row-value" id="settingsMainQualityValue">Auto</span>
+          <span class="settings-row-arrow" aria-hidden="true">›</span>
+        </button>
+        <button class="settings-row settings-row--link" id="settingsMainSubtitleBtn" type="button" aria-label="Abrir opções de legenda">
+          <span class="settings-row-label">Legenda</span>
+          <span class="settings-row-value" id="settingsMainSubtitleValue">N/D</span>
+          <span class="settings-row-arrow" aria-hidden="true">›</span>
+        </button>
+      </div>
+      <div class="settings-menu-sub hidden" id="settingsMenuSub">
+        <button class="settings-sub-back" id="settingsBackBtn" type="button" aria-label="Voltar para configurações">
+          <span class="settings-sub-back-icon" aria-hidden="true">‹</span>
+          <span class="settings-sub-back-label" id="settingsSubTitle">Áudio</span>
+        </button>
+        <div class="settings-sub-list" id="settingsSubList"></div>
+      </div>
+    </div>
+
+    <div class="clip-modal-backdrop" id="clipModalBackdrop" data-open="false" aria-hidden="true">
+      <div class="clip-modal" id="clipModal" role="dialog" aria-modal="true" aria-labelledby="clipModalTitle">
+        <div class="clip-modal__header">
+          <div>
+            <div class="clip-modal__eyebrow">Ferramenta para criadores</div>
+            <h2 class="clip-modal__title" id="clipModalTitle">Exportar clipe</h2>
+            <p class="clip-modal__subtitle">Selecione o trecho do episódio e exporte um arquivo `.mkv` com até 5 minutos.</p>
+          </div>
+          <button class="clip-modal__close" id="clipModalCloseBtn" type="button" aria-label="Fechar exportação de clipe">✕</button>
+        </div>
+
+        <div class="clip-modal__body">
+          <div class="clip-modal__preview-card">
+            <video class="clip-modal__preview-video" id="clipPreviewVideo" playsinline muted preload="metadata"></video>
+            <div class="clip-modal__preview-badge" id="clipPreviewStatus">Prévia do clipe</div>
+          </div>
+
+          <div class="clip-modal__section">
+            <div class="clip-modal__section-title">Janela do clipe</div>
+            <div class="clip-modal__summary">
+              <div>Início <strong id="clipStartLabel">00:00.000</strong></div>
+              <div>Fim <strong id="clipEndLabel">00:00.000</strong></div>
+              <div>Duração <strong id="clipDurationLabel">00:00.000</strong></div>
+            </div>
+
+            <div class="clip-modal__range-shell">
+              <div class="clip-modal__range-track"></div>
+              <div class="clip-modal__range-fill" id="clipRangeFill"></div>
+            </div>
+
+            <div class="clip-modal__slider-grid">
+              <div class="clip-modal__slider-row">
+                <label for="clipStartRange">Início</label>
+                <input id="clipStartRange" type="range" min="0" max="0" step="1" value="0">
+                <output id="clipStartOutput">00:00.000</output>
+              </div>
+              <div class="clip-modal__slider-row">
+                <label for="clipEndRange">Fim</label>
+                <input id="clipEndRange" type="range" min="0" max="0" step="1" value="0">
+                <output id="clipEndOutput">00:00.000</output>
+              </div>
+            </div>
+          </div>
+
+          <div class="clip-modal__fields">
+            <div class="clip-modal__field-group">
+              <h4>Início</h4>
+              <div class="clip-modal__field-grid">
+                <label class="clip-modal__field">
+                  <span>Hora</span>
+                  <input id="clipStartHours" type="number" min="0" step="1" inputmode="numeric">
+                </label>
+                <label class="clip-modal__field">
+                  <span>Min</span>
+                  <input id="clipStartMinutes" type="number" min="0" max="59" step="1" inputmode="numeric">
+                </label>
+                <label class="clip-modal__field">
+                  <span>Seg</span>
+                  <input id="clipStartSeconds" type="number" min="0" max="59" step="1" inputmode="numeric">
+                </label>
+                <label class="clip-modal__field">
+                  <span>Ms</span>
+                  <input id="clipStartMillis" type="number" min="0" max="999" step="1" inputmode="numeric">
+                </label>
+              </div>
+            </div>
+
+            <div class="clip-modal__field-group">
+              <h4>Fim</h4>
+              <div class="clip-modal__field-grid">
+                <label class="clip-modal__field">
+                  <span>Hora</span>
+                  <input id="clipEndHours" type="number" min="0" step="1" inputmode="numeric">
+                </label>
+                <label class="clip-modal__field">
+                  <span>Min</span>
+                  <input id="clipEndMinutes" type="number" min="0" max="59" step="1" inputmode="numeric">
+                </label>
+                <label class="clip-modal__field">
+                  <span>Seg</span>
+                  <input id="clipEndSeconds" type="number" min="0" max="59" step="1" inputmode="numeric">
+                </label>
+                <label class="clip-modal__field">
+                  <span>Ms</span>
+                  <input id="clipEndMillis" type="number" min="0" max="999" step="1" inputmode="numeric">
+                </label>
+              </div>
+            </div>
+          </div>
+
+          <div class="clip-modal__footer">
+            <div class="clip-modal__notes">
+              <strong>Limite:</strong> até 5 minutos por clipe. A exportação gera um `.mkv` local para download.
+            </div>
+            <div class="clip-modal__error" id="clipModalError" hidden></div>
+            <div class="clip-modal__actions">
+              <button class="clip-modal__button" id="clipPreviewPlayBtn" type="button">Reproduzir prévia</button>
+              <button class="clip-modal__button" id="clipModalCancelBtn" type="button">Cancelar</button>
+              <button class="clip-modal__button clip-modal__button--primary" id="clipExportBtn" type="button">Exportar .mkv</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="comments-panel-backdrop" id="commentsPanelBackdrop" data-open="false" aria-hidden="true">
+      <aside class="comments-panel" id="commentsPanel" aria-labelledby="commentsPanelTitle">
+        <div class="comments-panel__header">
+          <div>
+            <div class="comments-panel__eyebrow">Comentários do episódio</div>
+            <h2 class="comments-panel__title" id="commentsPanelTitle">Chat do episódio</h2>
+            <p class="comments-panel__subtitle">
+              <span id="commentsPanelCount">0 comentários</span>
+            </p>
+          </div>
+          <button class="comments-panel__close" id="commentsCloseBtn" type="button" aria-label="Fechar comentários">✕</button>
+        </div>
+
+        <div class="comments-panel__list" id="commentsPanelList"></div>
+
+        <form class="comments-panel__composer" id="commentsForm">
+          <label class="sr-only" for="commentsInput">Seu comentário</label>
+          <textarea
+            class="comments-panel__textarea"
+            id="commentsInput"
+            maxlength="1000"
+            placeholder="Escreva um comentário sobre este episódio…"
+          ></textarea>
+          <div class="comments-panel__composer-meta">
+            <div class="comments-panel__error" id="commentsFormError" hidden></div>
+            <div class="comments-panel__hint"><span id="commentsCharCount">0/1000</span> • Enter para enviar, Shift + Enter para nova linha.</div>
+          </div>
+        </form>
+      </aside>
+    </div>
+
+    <div class="watch-skip-toast" id="watchSkipToast" data-visible="false" aria-hidden="true">
+      <button class="watch-skip-toast__action" id="watchSkipToastBtn" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <use href="__BERRY_PLAYER_ASSET_BASE__/icons.svg#skip"></use>
+        </svg>
+        <span class="watch-skip-toast__title" id="watchSkipToastTitle">Pular abertura</span>
+      </button>
+    </div>
+
+    <div class="watch-next-toast" id="watchNextToast" data-visible="false" aria-hidden="true">
+      <button class="watch-next-toast__action" id="watchNextToastBtn" type="button">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <use href="__BERRY_PLAYER_ASSET_BASE__/icons.svg#next"></use>
+        </svg>
+        <span class="watch-next-toast__title" id="watchNextToastTitle">Próximo episódio</span>
+      </button>
+    </div>
+
+    <div class="watch-endcard" id="watchEndcard" data-visible="false" aria-hidden="true">
+      <div class="watch-endcard__backgrounds" id="watchEndcardBackgrounds"></div>
+      <div class="watch-endcard__hero">
+        <div class="watch-endcard__hero-copy">
+          <div class="watch-endcard__eyebrow" id="watchEndcardEyebrow">Se você gostou deste anime</div>
+          <div class="watch-endcard__rating">
+            <div class="watch-endcard__rating-label">Avalie esse anime</div>
+            <div class="watch-endcard__rating-group">
+              <button class="watch-endcard__reaction" type="button" data-rating-value="odiei" data-icon-count="1" data-icon-direction="down">
+                <span class="watch-endcard__reaction-icons" aria-hidden="true"></span>
+                <span class="watch-endcard__reaction-text">Odiei</span>
+              </button>
+              <button class="watch-endcard__reaction" type="button" data-rating-value="gostei" data-icon-count="2">
+                <span class="watch-endcard__reaction-icons" aria-hidden="true"></span>
+                <span class="watch-endcard__reaction-text">Gostei</span>
+              </button>
+              <button class="watch-endcard__reaction" type="button" data-rating-value="amei" data-icon-count="3">
+                <span class="watch-endcard__reaction-icons" aria-hidden="true"></span>
+                <span class="watch-endcard__reaction-text">Amei</span>
+              </button>
+            </div>
+          </div>
+          <h2 class="watch-endcard__title" id="watchEndcardAnimeTitle">Anime recomendado</h2>
+          <div class="watch-endcard__meta" id="watchEndcardMeta">BerryAnimes</div>
+          <p class="watch-endcard__description" id="watchEndcardDescription">
+            O episódio continua no canto enquanto o hero banner passa por recomendações parecidas.
+          </p>
+          <div class="watch-endcard__actions">
+            <a class="watch-endcard__button watch-endcard__button--primary" id="watchEndcardPrimaryLink" href="/">Abrir anime</a>
+            <button class="watch-endcard__button" id="watchEndcardReplayBtn" type="button">Reassistir episódio</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
