@@ -28,15 +28,15 @@
       visibility: visible;
     }
   </style>
-  <link rel="stylesheet" href="../dist/berry-player.css">
-  <script src="../dist/cast-bootstrap.js"></script>
+  <link rel="stylesheet" href="../dist/player.css">
+  <script src="../dist/cast.js"></script>
 </head>
 <body>
   <div
     id="watchApp"
     data-shell-state="booting"
     data-asset-base="../dist"
-    data-template-url="../dist/templates/watch-player-shell.html"
+    data-template-url="../dist/templates/player-shell.html"
     data-storage-namespace="berry-web-player"
     data-stream-provider-header="x-player-provider"
     data-stream-provider-value="berry-web-player"
@@ -48,6 +48,6 @@
 
   <script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1" async></script>
   <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.18/dist/hls.min.js"></script>
-  <script type="module" src="../dist/watch-page.js"></script>
+  <script type="module" src="../dist/watch.js"></script>
 </body>
 </html>

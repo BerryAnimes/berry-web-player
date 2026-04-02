@@ -3,7 +3,7 @@
 ## Revisão feita antes da publicação
 
 - Remoção do monólito inline em `watch.html`.
-- Extração dos SVGs de controle para `icons.svg`.
+- Controles mantidos com SVG inline no template público.
 - Defaults do pacote tornados genéricos.
 - Branding e headers internos movidos para configuração do shell privado.
 - Nenhum `.env`, segredo, token real, IP do VPS ou caminho do backend foi incluído em `dist/`.

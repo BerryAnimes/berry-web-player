@@ -103,12 +103,11 @@ Retorna os dados usados por `loadWatchData()`:
 Arquivos em produção:
 
 - `views/watch.html`
-- `public/berry-web-player/berry-player.css`
-- `public/berry-web-player/berry-player.js`
-- `public/berry-web-player/watch-page.js`
-- `public/berry-web-player/cast-bootstrap.js`
-- `public/berry-web-player/templates/watch-player-shell.html`
-- `public/berry-web-player/icons.svg`
+- `public/berry-web-player/player.css`
+- `public/berry-web-player/player.js`
+- `public/berry-web-player/watch.js`
+- `public/berry-web-player/cast.js`
+- `public/berry-web-player/templates/player-shell.html`
 
 Em ambientes privados, o shell pode sobrescrever:
 

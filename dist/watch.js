@@ -1,5 +1,5 @@
 const DEFAULT_ASSET_BASE = '/berry-web-player';
-const DEFAULT_TEMPLATE_PATH = `${DEFAULT_ASSET_BASE}/templates/watch-player-shell.html`;
+const DEFAULT_TEMPLATE_PATH = `${DEFAULT_ASSET_BASE}/templates/player-shell.html`;
 const SHELL_STATE_ATTR = 'data-shell-state';
 let berryPlayerBootstrapPromise = null;
 
@@ -7,7 +7,7 @@ async function loadBerryPlayerBootstrap() {
   if (!berryPlayerBootstrapPromise) {
     const currentModuleUrl = new URL(import.meta.url);
     const cacheSuffix = currentModuleUrl.search || '';
-    berryPlayerBootstrapPromise = import(`./berry-player.js${cacheSuffix}`)
+    berryPlayerBootstrapPromise = import(`./player.js${cacheSuffix}`)
       .then((module) => module.bootstrapBerryWatchPage);
   }
   return berryPlayerBootstrapPromise;

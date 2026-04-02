@@ -4,12 +4,11 @@ Biblioteca de player web extraída do `views/watch.html` da BerryAnimes e reorga
 
 ## O que este pacote entrega
 
-- `dist/berry-player.css`: estilos completos do player.
-- `dist/cast-bootstrap.js`: bootstrap isolado do Google Cast.
-- `dist/berry-player.js`: módulo principal do player.
-- `dist/watch-page.js`: bootstrap que injeta o template HTML e inicializa o módulo.
-- `dist/templates/watch-player-shell.html`: estrutura HTML do player.
-- `dist/icons.svg`: sprite com os ícones de controle.
+- `dist/player.css`: estilos completos do player.
+- `dist/cast.js`: bootstrap isolado do Google Cast.
+- `dist/player.js`: módulo principal do player.
+- `dist/watch.js`: bootstrap que injeta o template HTML e inicializa o módulo.
+- `dist/templates/player-shell.html`: estrutura HTML do player.
 - `examples/watch.html`: exemplo mínimo de integração.
 
 ## Fluxo de uso
@@ -17,7 +16,7 @@ Biblioteca de player web extraída do `views/watch.html` da BerryAnimes e reorga
 1. Sirva a pasta `dist/`.
 2. Crie um shell HTML com um `#watchApp`.
 3. Aponte `data-asset-base` e `data-template-url`.
-4. Carregue `cast-bootstrap.js`, `hls.js` e `watch-page.js`.
+4. Carregue `cast.js`, `hls.js` e `watch.js`.
 5. Exponha o backend com o contrato de `/api/watch/:seasonToken/:episodeToken`.
 
 ## Shell mínimo
@@ -29,14 +28,14 @@ Biblioteca de player web extraída do `views/watch.html` da BerryAnimes e reorga
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Berry Web Player</title>
-  <link rel="stylesheet" href="../dist/berry-player.css">
-  <script src="../dist/cast-bootstrap.js"></script>
+  <link rel="stylesheet" href="../dist/player.css">
+  <script src="../dist/cast.js"></script>
 </head>
 <body>
   <div
     id="watchApp"
     data-asset-base="../dist"
-    data-template-url="../dist/templates/watch-player-shell.html"
+    data-template-url="../dist/templates/player-shell.html"
     data-storage-namespace="berry-web-player"
     data-stream-provider-header="x-player-provider"
     data-stream-provider-value="berry-web-player"
@@ -48,7 +47,7 @@ Biblioteca de player web extraída do `views/watch.html` da BerryAnimes e reorga
 
   <script src="https://www.gstatic.com/cv/js/sender/v1/cast_sender.js?loadCastFramework=1" async></script>
   <script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.18/dist/hls.min.js"></script>
-  <script type="module" src="../dist/watch-page.js"></script>
+  <script type="module" src="../dist/watch.js"></script>
 </body>
 </html>
 ```
@@ -58,6 +57,7 @@ Biblioteca de player web extraída do `views/watch.html` da BerryAnimes e reorga
 - `hls.js` para HLS.
 - `cast_sender.js` para Google Cast.
 - `subtitles-octopus.js` é opcional. Sem ele o player continua funcionando, mas perde o renderizador ASS avançado.
+- Os ícones dos controles ficam inline no template, então não existe sprite SVG obrigatório no runtime.
 
 ## Configuração por `data-*`
 
