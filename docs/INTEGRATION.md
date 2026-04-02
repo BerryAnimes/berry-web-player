@@ -28,9 +28,9 @@ Retorna os dados usados por `loadWatchData()`:
   "player": {
     "streamUrl": "https://...",
     "mimeType": "application/vnd.apple.mpegurl",
-    "provider": "videoapi",
+    "provider": "example-provider",
     "streamProviderHeader": "x-player-provider",
-    "streamProviderValue": "berry-web-player",
+    "streamProviderValue": "public-player",
     "streamContextHeader": "x-player-context",
     "streamContextToken": "opaque-token",
     "externalEmbed": false,
@@ -98,9 +98,9 @@ Retorna os dados usados por `loadWatchData()`:
 - `window.cast`: opcional, só habilita o botão Cast.
 - `window.SubtitlesOctopus`: opcional, ativa o renderizador ASS avançado.
 
-## Integração privada
+## Integração do host
 
-Arquivos em produção:
+Arquivos da biblioteca:
 
 - `views/watch.html`
 - `public/berry-web-player/player.css`
@@ -109,7 +109,7 @@ Arquivos em produção:
 - `public/berry-web-player/cast.js`
 - `public/berry-web-player/templates/player-shell.html`
 
-Em ambientes privados, o shell pode sobrescrever:
+A aplicação consumidora pode sobrescrever:
 
 - `data-storage-namespace`
 - `data-stream-provider-header`

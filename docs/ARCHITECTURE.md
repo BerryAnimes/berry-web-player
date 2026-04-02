@@ -45,12 +45,12 @@
 
 ## Padrão de configuração
 
-O módulo principal ficou com defaults genéricos:
+O módulo principal ficou com defaults públicos genéricos:
 
-- `storageNamespace = berry-web-player`
+- `storageNamespace = player-public`
 - `streamProviderHeader = x-player-provider`
-- `streamProviderValue = berry-web-player`
+- `streamProviderValue = public-player`
 - `streamContextHeader = x-player-context`
-- `downloadPrefix = berry-web-player`
+- `downloadPrefix = player-public`
 
-Qualquer host privado pode sobrescrever isso via `data-*`.
+Qualquer aplicação consumidora pode sobrescrever isso via `data-*`.

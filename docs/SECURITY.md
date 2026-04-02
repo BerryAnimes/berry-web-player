@@ -2,20 +2,16 @@
 
 ## Revisão feita antes da publicação
 
-- Remoção do monólito inline em `watch.html`.
+- Remoção do monólito inline no shell do player.
 - Controles mantidos com SVG inline no template público.
-- Defaults do pacote tornados genéricos.
-- Branding e headers internos movidos para configuração do shell privado.
-- Nenhum `.env`, segredo, token real, IP do VPS ou caminho do backend foi incluído em `dist/`.
+- Defaults públicos mantidos genéricos.
+- Detalhes específicos do ambiente consumidor ficaram fora do pacote público.
+- Nenhum segredo, credencial, token real, IP ou caminho privado foi incluído em `dist/`.
 
-## O que não vai para o repositório público
+## O que fica fora do pacote público
 
-- `server.js`
-- bancos SQLite
-- credenciais
-- tokens de sessão
-- rotas internas fora do contrato do player
-- backups do projeto
+O repositório aberto deve conter apenas a biblioteca, a documentação e o exemplo de integração.
+Artefatos do ambiente privado, credenciais, dados de infraestrutura, rotas administrativas e backups internos não fazem parte dessa publicação.
 
 ## Riscos ainda existentes
 
@@ -27,7 +23,7 @@
 ## Checklist antes de subir uma nova versão
 
 1. Rode o exportador público.
-2. Verifique se `dist/` não contém branding interno por padrão.
-3. Busque por `x-berry`, `berryanimes`, IPs e segredos no pacote exportado.
+2. Verifique se `dist/` só contém a biblioteca pública e os exemplos esperados.
+3. Busque por nomes internos, credenciais e URLs privadas no pacote exportado.
 4. Valide imports ESM e carregamento do template.
 5. Confirme que `comments` e `clip` continuam protegidos no backend.

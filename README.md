@@ -1,6 +1,6 @@
 # Berry Web Player
 
-Biblioteca de player web extraída do `views/watch.html` da BerryAnimes e reorganizada em arquivos separados.
+Biblioteca de player web publicada separadamente para reutilização externa e reorganizada em arquivos menores.
 
 ## O que este pacote entrega
 
@@ -36,11 +36,11 @@ Biblioteca de player web extraída do `views/watch.html` da BerryAnimes e reorga
     id="watchApp"
     data-asset-base="../dist"
     data-template-url="../dist/templates/player-shell.html"
-    data-storage-namespace="berry-web-player"
+    data-storage-namespace="player-public"
     data-stream-provider-header="x-player-provider"
-    data-stream-provider-value="berry-web-player"
+    data-stream-provider-value="public-player"
     data-stream-context-header="x-player-context"
-    data-download-prefix="berry-web-player"
+    data-download-prefix="player-public"
   >
     <div class="watch-loading">Montando player...</div>
   </div>
@@ -58,6 +58,7 @@ Biblioteca de player web extraída do `views/watch.html` da BerryAnimes e reorga
 - `cast_sender.js` para Google Cast.
 - `subtitles-octopus.js` é opcional. Sem ele o player continua funcionando, mas perde o renderizador ASS avançado.
 - Os ícones dos controles ficam inline no template, então não existe sprite SVG obrigatório no runtime.
+- O pacote público não inclui o provedor de vídeos nem o backend privado da aplicação consumidora.
 
 ## Configuração por `data-*`
 
@@ -77,7 +78,7 @@ Biblioteca de player web extraída do `views/watch.html` da BerryAnimes e reorga
 
 ## Exportação a partir do projeto principal
 
-No monorepo interno da BerryAnimes, rode:
+No projeto privado que consome esta biblioteca, rode:
 
 ```bash
 node scripts/export-berry-web-player.mjs /caminho/do/clone/berry-web-player
