@@ -1,6 +1,5 @@
 export function bootstrapBerryWatchPage(options = {}) {
       const normalizedAssetBase = String(options.assetBase || '/berry-web-player').trim().replace(/\/+$/, '') || '/berry-web-player';
-      const iconSpriteUrl = `${normalizedAssetBase}/icons.svg`;
       const config = {
         storageNamespace: String(options.storageNamespace || 'berry-web-player').trim() || 'berry-web-player',
         streamProviderHeader: String(options.streamProviderHeader || 'x-player-provider').trim() || 'x-player-provider',
@@ -114,7 +113,7 @@ export function bootstrapBerryWatchPage(options = {}) {
       const watchEndcardPrimaryLink = document.getElementById('watchEndcardPrimaryLink');
       const watchEndcardReplayBtn = document.getElementById('watchEndcardReplayBtn');
       const watchEndcardRatingButtons = Array.from(document.querySelectorAll('.watch-endcard__reaction[data-rating-value]'));
-      const WATCH_REACTION_ICON = `<svg viewBox="0 0 60 60" fill="none" aria-hidden="true" focusable="false"><use href="${iconSpriteUrl}#reaction"></use></svg>`;
+      const WATCH_REACTION_ICON = '<svg viewBox="0 0 60 60" fill="none" aria-hidden="true" focusable="false"><use href="#berry-icon-reaction" xlink:href="#berry-icon-reaction"></use></svg>';
 
       if (!errorEl || !playerShell || !mediaControls || !video) {
         throw new Error('Berry web player shell não foi montado antes do bootstrap.');
