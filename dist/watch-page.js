@@ -52,16 +52,27 @@ async function mountIconSprite(root, assetBase) {
   }
 
   const spriteMarkup = await response.text();
-  const host = document.createElement('div');
-  host.id = ICON_SPRITE_HOST_ID;
-  host.hidden = true;
-  host.setAttribute('aria-hidden', 'true');
-  host.style.position = 'absolute';
-  host.style.width = '0';
-  host.style.height = '0';
-  host.style.overflow = 'hidden';
-  host.innerHTML = spriteMarkup;
-  root.prepend(host);
+  const parser = new DOMParser();
+  const spriteDocument = parser.parseFromString(spriteMarkup, 'image/svg+xml');
+  const spriteEl = spriteDocument.documentElement;
+
+  if (!spriteEl || String(spriteEl.nodeName || '').toLowerCase() !== 'svg') {
+    throw new Error('Falha ao montar os icones do player.');
+  }
+
+  const importedSprite = document.importNode(spriteEl, true);
+  importedSprite.id = ICON_SPRITE_HOST_ID;
+  importedSprite.setAttribute('aria-hidden', 'true');
+  importedSprite.setAttribute('focusable', 'false');
+  importedSprite.style.position = 'absolute';
+  importedSprite.style.width = '0';
+  importedSprite.style.height = '0';
+  importedSprite.style.overflow = 'hidden';
+  importedSprite.style.pointerEvents = 'none';
+  importedSprite.style.visibility = 'hidden';
+
+  const mountTarget = document.body || root;
+  mountTarget.prepend(importedSprite);
 }
 
 async function startWatchPage() {
