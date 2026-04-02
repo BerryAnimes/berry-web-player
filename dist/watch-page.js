@@ -1,6 +1,5 @@
 const DEFAULT_ASSET_BASE = '/berry-web-player';
 const DEFAULT_TEMPLATE_PATH = `${DEFAULT_ASSET_BASE}/templates/watch-player-shell.html`;
-const ICON_SPRITE_HOST_ID = 'berryPlayerIconSpriteHost';
 const SHELL_STATE_ATTR = 'data-shell-state';
 let berryPlayerBootstrapPromise = null;
 
@@ -38,43 +37,6 @@ async function mountTemplate(root, { assetBase, templateUrl }) {
   root.innerHTML = template.replaceAll('__BERRY_PLAYER_ASSET_BASE__', assetBase);
 }
 
-async function mountIconSprite(root, assetBase) {
-  const existing = document.getElementById(ICON_SPRITE_HOST_ID);
-  if (existing) return;
-
-  const response = await fetch(`${assetBase}/icons.svg`, {
-    credentials: 'same-origin',
-    cache: 'force-cache'
-  });
-
-  if (!response.ok) {
-    throw new Error(`Falha ao carregar os icones do player (${response.status}).`);
-  }
-
-  const spriteMarkup = await response.text();
-  const parser = new DOMParser();
-  const spriteDocument = parser.parseFromString(spriteMarkup, 'image/svg+xml');
-  const spriteEl = spriteDocument.documentElement;
-
-  if (!spriteEl || String(spriteEl.nodeName || '').toLowerCase() !== 'svg') {
-    throw new Error('Falha ao montar os icones do player.');
-  }
-
-  const importedSprite = document.importNode(spriteEl, true);
-  importedSprite.id = ICON_SPRITE_HOST_ID;
-  importedSprite.setAttribute('aria-hidden', 'true');
-  importedSprite.setAttribute('focusable', 'false');
-  importedSprite.style.position = 'absolute';
-  importedSprite.style.width = '0';
-  importedSprite.style.height = '0';
-  importedSprite.style.overflow = 'hidden';
-  importedSprite.style.pointerEvents = 'none';
-  importedSprite.style.visibility = 'hidden';
-
-  const mountTarget = document.body || root;
-  mountTarget.prepend(importedSprite);
-}
-
 async function startWatchPage() {
   const root = document.getElementById('watchApp');
   if (!root) return;
@@ -93,7 +55,6 @@ async function startWatchPage() {
       assetBase,
       templateUrl
     });
-    await mountIconSprite(root, assetBase);
     const bootstrapBerryWatchPage = await loadBerryPlayerBootstrap();
     bootstrapBerryWatchPage({
       assetBase,
